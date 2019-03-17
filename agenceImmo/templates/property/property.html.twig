@@ -1,7 +1,8 @@
 <div class="card nb-4">
     <div class="card-body">
         <h5 class="card-title">
-            <a href="{{ path('properties_show' , {slug: property.slug, id: property.id }) }}">
+            <a href="{{ path('property_show', {id: property.id, slug: property.slug })  }}">
+            {{ property.title }}
             </a>
         </h5>
         <p class="card-text"> {{ property.surface}} - {{ property.city }} ({{ property.postalCode}})  </p>

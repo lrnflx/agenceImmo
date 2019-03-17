@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Admin;
 
+use App\Entity\Option;
 use App\Entity\Property;
 use App\Form\PropertyType;
 use Doctrine\ORM\EntityManager;
@@ -65,7 +66,7 @@ class AdminPropertyController extends AbstractController
      * @Route("/admin/property/{id}", name="admin_property_edit", methods="GET|POST")
      */
     public function edit(Property $property, Request $request)
-    {
+    {   
         $form =  $this->createForm(PropertyType::class, $property);
         $form->handleRequest($request);
 
