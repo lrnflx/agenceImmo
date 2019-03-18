@@ -1,0 +1,7 @@
+<h2> <a href="{{ url('property_show', {id: contact.property.id, slug: contact.property.slug}) }}">{{ contact.property.title }}</a> </h2>
+
+<p>Prénom : {{ contact.firstname }}</p>
+<p>Nom : {{ contact.lastname }}</p>
+<p>Téléphone : {{ contact.phone }}</p>
+<p>Mail : {{ contact.email }}</p>
+<p>{{contact.message|nl2br}}</p>
