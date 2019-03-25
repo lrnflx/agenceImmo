@@ -6,16 +6,12 @@ use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
  * @UniqueEntity("title")
- * @Vich\Uploadable
  */
 class Property
 {
@@ -29,21 +25,6 @@ class Property
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", length=255)
-     */
-    private $filename;
-
-    /**
-     * @var File|null
-     * @Assert\Image(
-     * mimeTypes="image/jpeg"
-     * )
-     * @Vich\UploadableField(mapping="property_image", fileNameProperty="filename")
-     */
-    private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -115,7 +96,7 @@ class Property
     private $sold;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
 
@@ -125,15 +106,28 @@ class Property
     private $options;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="property", orphanRemoval=true, cascade={"persist"})
+     */
+    private $pictures;
+
+    /**
+     * @Assert\All({
+     * @Assert\Image(mimeTypes="image/jpeg")
+     * })
+     */
+    private $pictureFiles;
 
     public function __construct()
     {
         $this->created_at = new \Datetime();
         $this->sold = false;
         $this->options = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -340,33 +334,6 @@ class Property
         return $this;
     }
 
-    public function getFilename(): ?string 
-    {
-        return $this->filename;
-    }
-
-    public function setFilename(?string $filename): Property
-    {
-        $this->filename = $filename;
-        return $this;
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    public function setImageFile(?File $imageFile): Property
-    {
-        $this->imageFile = $imageFile;
-        // Only change the updated af if the file is really uploaded to avoid database updates.
-        // This is needed when the file should be set when loading the entity.
-        if ($this->imageFile instanceof UploadedFile) {
-            $this->updated_at = new \DateTime('now');
-        }
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updated_at;
@@ -376,6 +343,53 @@ class Property
     {
         $this->updated_at = $updated_at;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Picture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+            $picture->setProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+            // set the owning side to null (unless already changed)
+            if ($picture->getProperty() === $this) {
+                $picture->setProperty(null);
+            }
+        }
+
+        return $this;
+    }
+    public function getPictureFiles()
+    {
+        return $this->pictureFiles;
+    }
+
+    public function setPictureFiles($pictureFiles):self
+    {   
+        foreach($pictureFiles as $pictureFile){
+            $picture = new Picture();
+            $picture->setImageFile($pictureFile);
+            $this->addPicture($picture);
+        }
+
+        $this->pictureFiles = $pictureFiles;
         return $this;
     }
 

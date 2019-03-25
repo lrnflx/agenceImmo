@@ -33,7 +33,7 @@ class ImageCacheSubscriber implements EventSubscriber
         $entity = $args->getEntity();
 
         //Si l'entité n'est pas une instance de Property, on retourne
-        if (!$entity instanceof Property)
+        if (!$entity instanceof Picture)
         {
             return;
         }
@@ -48,7 +48,7 @@ class ImageCacheSubscriber implements EventSubscriber
         // dump($args->getObject());
         $entity = $args->getEntity();
 
-        if (!$entity instanceof Property)
+        if (!$entity instanceof Picture)
         {
             return;
         }
