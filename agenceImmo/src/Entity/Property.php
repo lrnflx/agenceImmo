@@ -364,6 +364,15 @@ class Property
         return $this;
     }
 
+    public function getPicture(): ?Picture{
+        if($this->pictures->isEmpty())
+        {
+            return null;
+        }
+            return $this->pictures->first();
+    
+    }
+
     public function removePicture(Picture $picture): self
     {
         if ($this->pictures->contains($picture)) {

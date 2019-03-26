@@ -15,10 +15,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminPictureController extends AbstractController
 {   
     /**
-     * @Route("/{id}", name="admin_picture_delete")
+     * @Route("/{id}", name="admin_picture_delete", methods="DELETE")
      */
     public function delete(Picture $picture, Request $request)
     {   
+        //Récupération d'un tableau associatif
         $data = json_decode($request->getContent(), true);
     
 
@@ -27,9 +28,7 @@ class AdminPictureController extends AbstractController
             $entityManager->remove($picture);
             $entityManager->flush();
             return new JsonResponse(['success' => 1]);
-        }
-
-
+        }else
         return new JsonResponse(['error' => 'token invalide'], 400);
     }
 }
