@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class PropertyType extends AbstractType
 {
@@ -37,6 +38,8 @@ class PropertyType extends AbstractType
             ->add('city')
             ->add('adress')
             ->add('postal_code')
+            ->add('lat', HiddenType::class)
+            ->add('lng', HiddenType::class)
             ->add('sold')
         ;
     }
