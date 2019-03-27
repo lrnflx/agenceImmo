@@ -135,6 +135,7 @@ class Property
     public function __construct()
     {
         $this->created_at = new \Datetime();
+        $this->updated_at = new \Datetime();
         $this->sold = false;
         $this->options = new ArrayCollection();
         $this->pictures = new ArrayCollection();
