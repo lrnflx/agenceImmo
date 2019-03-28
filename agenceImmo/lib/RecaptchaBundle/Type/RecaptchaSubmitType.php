@@ -9,7 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RecaptchaSubmitType extends AbstractType{
 
-    
     private $key;
 
     public function __construct(string $key)
@@ -31,7 +30,6 @@ class RecaptchaSubmitType extends AbstractType{
         $views->vars['key'] = $this->key;
         //To have the label passed in options
         $view->vars['button'] = $options['label'];
-
     }
 
     public function getBlockPrefix(){

@@ -16,16 +16,19 @@ class RecaptchaExtension extends Extension
         $loader = new YamlFileLoader(
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
+            // new FileLocator(realpath(dirname(__FILE__)).'/../Resources/config/')
         );
         $loader->load('services.yaml');
-        dd($loader);
+        // dd($loader->load('services.yaml'));
+        // dd($container);
 
-
+ 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration,$configs);
         // dump($config); die();
         $container->setParameter('recaptcha.key', $config['key']);
         $container->setParameter('recaptcha.secret', $config['secret']);
         
+
     } 
 } 

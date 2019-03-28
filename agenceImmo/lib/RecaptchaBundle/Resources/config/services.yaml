@@ -1,6 +1,7 @@
 services: 
   recaptcha.type: 
-    class: Lrnflx\RecaptchaBundle\Type\RecaptchaSubmitType
+    class: \Lrnflx\RecaptchaBundle\Type\RecaptchaSubmitType
     tags: ['form.type']
     arguments:
       $key: '%recaptcha.key%'
+      #$secret: '%recaptcha.secret%'
